@@ -1,0 +1,12 @@
+ResourceId;Concept;Score
+1;purge;0.9
+1;terror;0.5
+1;stalin;0.85
+1;police;0.8
+1;NKVD;0.6
+1;leadership;0.4
+1;army;0.3
+1;war;0.7
+2;purge;0.3
+2;stalin;0.6
+3;stalin;0.6

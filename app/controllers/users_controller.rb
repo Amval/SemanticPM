@@ -5,6 +5,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @courses = @user.courses
+    @course = current_user.courses.build if logged_in?
   end
 
   def create

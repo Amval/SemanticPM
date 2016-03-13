@@ -65,4 +65,12 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.authenticated?('')
   end
 
+  test "associated courses should be destroyed" do
+    @user.save
+    @user.courses.create!(name: "Lorem ipsum")
+    assert_difference 'Course.count', -1 do
+      @user.destroy
+    end
+  end
+
 end

@@ -23,7 +23,7 @@ class CoursesController < ApplicationController
 
   private
     def course_params
-      params.require(:course).permit(:name, :concept)
+      params.require(:course).permit(:name, :concept, :activity_log, :student_generated_content)
     end
 
     def get_absolute_path(url)

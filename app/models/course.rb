@@ -1,7 +1,6 @@
 require 'csv'
 
 class Course < ActiveRecord::Base
-  attr_accessor :domain, :jarl
 
   belongs_to :user
   has_many :learning_resource
@@ -18,16 +17,12 @@ class Course < ActiveRecord::Base
 
   def process_concepts
     url = get_absolute_path(concept.url)
-    InputReader::learning_resources(url)
   end
 
   def get_absolute_path(url)
     "#{Dir.pwd}/public#{url}"
   end
 
-  def prueba
-    jarl
-  end
 
 
 end

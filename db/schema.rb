@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311213443) do
+ActiveRecord::Schema.define(version: 20160319120706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -24,10 +25,22 @@ ActiveRecord::Schema.define(version: 20160311213443) do
     t.string   "concept"
     t.string   "activity_log"
     t.string   "student_generated_content"
+    t.hstore   "learning_resources"
   end
 
   add_index "courses", ["user_id", "created_at"], name: "index_courses_on_user_id_and_created_at", using: :btree
   add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree
+
+  create_table "students", force: :cascade do |t|
+    t.string   "original_id"
+    t.integer  "course_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "learning_resources", default: [],              array: true
+  end
+
+  add_index "students", ["course_id", "updated_at"], name: "index_students_on_course_id_and_updated_at", using: :btree
+  add_index "students", ["course_id"], name: "index_students_on_course_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
@@ -41,4 +54,5 @@ ActiveRecord::Schema.define(version: 20160311213443) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
   add_foreign_key "courses", "users"
+  add_foreign_key "students", "courses"
 end

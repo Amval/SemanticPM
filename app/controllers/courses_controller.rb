@@ -3,10 +3,13 @@ class CoursesController < ApplicationController
 
   def create
     @course = current_user.courses.build(course_params)
-    if @course.save
-      prueba = @course.process_concepts
-      flash[:success] = prueba
+    @course.learning_resources = @course.process_concepts
 
+    if @course.save
+      data = @course.process_activity_log
+      create_students(data) if !data.nil?
+
+      flash[:success] = @course.students
       redirect_to current_user
     else
       flash[:error] = "Course not created"
@@ -28,5 +31,11 @@ class CoursesController < ApplicationController
 
     def get_absolute_path(url)
       "#{Dir.pwd}/public#{url}"
+    end
+
+    def create_students(hash)
+      hash.each do |key, value|
+        @course.students.create(original_id: key, learning_resources: value)
+      end
     end
 end

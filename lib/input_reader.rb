@@ -2,6 +2,7 @@ require 'csv'
 
 # @TODO: Sanitise input. Is nput correct?
 # @TODO: Refactor CSV reading method. Block as an argument?
+include CoreExtensions
 
 # Namespace for methods that handle CSV processing.
 module InputReader
@@ -42,18 +43,15 @@ module InputReader
   end
 
   def self.resources_usage(filename)
+    #TODO: Monkeypatch value_in array
     user_models = {}
     CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
-      user_models.value_in_array(row.field('UserId'), row.field('ResourceId'))
+      user_models.value_in_array(row.field('StudentId'), row.field('ResourceId'))
     end
     user_models
   end
+
+
 end
 
 
-class Hash
-  def value_in_array(key, value)
-    self.key?(key) ? self[key] << value : self[key] = [value]
-  end
-
-end

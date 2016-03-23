@@ -1,37 +1,35 @@
-#require './resources_processor'
-#require './graph'
-
+require 'matrix'
+# Base Class for the Domain and User models. Transforms a collection of
+# dictionaries (pairs concept-score) into an Affiliation Network.
+#
+# There are no attributes to avoid polluting the Semantic Model with
+# redudant data.
+#
 module Models
-  # Base Class for the Domain and User models. Transforms a collection of
-  # dictionaries (pairs concept-score) into an Affiliation Network.
-  #
-  # @attr [Array of Hashes]
   class SemanticModel < Graph
-  require 'matrix'
-
-    attr_reader :resources, :keywords, :matrix, :matrix_t
 
     def initialize(*resources)
-      @resources = *resources
-      @keywords = collect_keywords
-      @matrix = Matrix.rows(resources.map { |resource| generate_row(resource) })
-      @matrix_t = matrix.transpose
+      resources = *resources
+      concepts = collect_concepts(resources)
+      matrix = Matrix.rows(resources.map { |resource| generate_row(concepts, resource) })
       # @TODO Composition instead of inheritance
-      super(keywords, keywords_matrix)
+      super(concepts, concepts_matrix(matrix))
     end
 
-    # Extract keywords (order of appearance)
+    # Extract concepts (order of appearance)
     #
-    def collect_keywords
+    def collect_concepts(resources)
       resources.map(&:keys).flatten.uniq
     end
 
-    def generate_row(resource)
-      keywords.map { |key| resource[key] || 0 }
+    # Generates a row of the matrix. The values correspond to the previous scores
+    # from the learning resources or zero, in case a concept is not present,
+    def generate_row(concepts, resource)
+      concepts.map { |key| resource[key] || 0 }
     end
 
-    def keywords_matrix
-      (matrix_t * matrix).round(3)
+    def concepts_matrix(matrix)
+      (matrix.transpose * matrix).round(3)
     end
 
     #def resources_matrix

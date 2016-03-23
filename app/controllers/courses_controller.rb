@@ -3,12 +3,7 @@ class CoursesController < ApplicationController
 
   def create
     @course = current_user.courses.build(course_params)
-    @course.learning_resources = @course.process_concepts
-
     if @course.save
-      data = @course.process_activity_log
-      create_students(data) if !data.nil?
-
       flash[:success] = @course.students
       redirect_to current_user
     else
@@ -26,7 +21,7 @@ class CoursesController < ApplicationController
 
   private
     def course_params
-      params.require(:course).permit(:name, :concept, :activity_log, :student_generated_content)
+      params.require(:course).permit(:name, :concepts, :activity_log, :student_generated_content)
     end
 
     def get_absolute_path(url)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160319120706) do
+ActiveRecord::Schema.define(version: 20160322195005) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,21 +22,29 @@ ActiveRecord::Schema.define(version: 20160319120706) do
     t.integer  "user_id"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.string   "concept"
+    t.string   "concepts"
     t.string   "activity_log"
     t.string   "student_generated_content"
-    t.hstore   "learning_resources"
   end
 
   add_index "courses", ["user_id", "created_at"], name: "index_courses_on_user_id_and_created_at", using: :btree
   add_index "courses", ["user_id"], name: "index_courses_on_user_id", using: :btree
 
+  create_table "domains", force: :cascade do |t|
+    t.integer  "course_id"
+    t.json     "model"
+    t.string   "concepts_list",      null: false, array: true
+    t.hstore   "learning_resources", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
   create_table "students", force: :cascade do |t|
     t.string   "original_id"
     t.integer  "course_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.string   "learning_resources", default: [],              array: true
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
+    t.string   "accessed_learning_resources", default: [],              array: true
   end
 
   add_index "students", ["course_id", "updated_at"], name: "index_students_on_course_id_and_updated_at", using: :btree

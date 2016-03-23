@@ -3,5 +3,5 @@ class Student < ActiveRecord::Base
 
   validates :course_id, presence: true
   validates :original_id, presence: true
-  validates :learning_resources, presence: true
+  validates :accessed_learning_resources, presence: true
 end

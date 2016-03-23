@@ -1,17 +1,12 @@
+# Represents the Domain Model for a given set of learning resources.
+# Transforms them into an Ontology Map (Weighted Graph)
+#
+# @attr_reader [String] name - To identify Domain Model
+# @attr_reader [Array of] name - To identify Domain Model
+#
 module Models
-  # Represents the Domain Model for a given set of learning resources.
-  # Transforms them into an Ontology Map (Weighted Graph)
-  #
-  # @attr_reader [String] name - To identify Domain Model
-  # @attr_reader [Array of] name - To identify Domain Model
-  #
   class DomainModel < SemanticModel
-    attr_reader :name
-    attr_reader :resourcesIDs
-
-    def initialize(name, resources)
-      @name = name
-      @resourceIDs = resources.keys
+    def initialize(resources)
       super(*resources.values)
     end
   end

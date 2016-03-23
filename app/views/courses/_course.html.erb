@@ -2,8 +2,9 @@
   <div class="content">
     <a class="header">
       <%= course.name %>
-      <% if !course.concept.nil? %>
+      <% if has_file? course.concepts %>
         <div class="ui label">
+          <%= course.domain %>
         </div>
       <% end %>
     </a>

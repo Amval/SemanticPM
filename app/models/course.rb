@@ -13,7 +13,7 @@ class Course < ActiveRecord::Base
 
   validates :user_id, presence: true
   validates :name, presence: true, length: { minimum: 6, maximum: 140}
-  validates :concept, presence: true
+  validates :concepts, presence: true
 
 
   #after_save :process_concepts, if: Proc.new { |course| !course.concept.url.nil? }
@@ -21,8 +21,8 @@ class Course < ActiveRecord::Base
   after_save :create_students, if: Proc.new { |course| !course.activity_log.nil? }
 
   def create_domain
-    if !concept.url.nil?
-      url = get_absolute_path(concept.url)
+    if !concepts.url.nil?
+      url = get_absolute_path(concepts.url)
       resources = InputReader::learning_resources(url)
       domain_model = Models::DomainModel.new(resources)
       json_domain = ActiveSupport::JSON.encode(domain_model)

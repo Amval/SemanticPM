@@ -1,5 +1,6 @@
 class Student < ActiveRecord::Base
   belongs_to :course
+  has_many :posts
 
   validates :course_id, presence: true
   validates :original_id, presence: true

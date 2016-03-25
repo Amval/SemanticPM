@@ -19,7 +19,7 @@ module InputReader
   # InputReader::learning_resources('concepts.csv')
   # =>{"1"=>{"purge"=>"0.9", "war"=>"0.7"}, "2"=>{"purge"=>"0.3", "stalin"=>"0.6"}, "3"=>{"stalin"=>"0.6"}}
   # @return Hash of hashes
-  def self.learning_resources(filename)
+  def self.concepts(filename)
     resources = {}
 
     CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
@@ -34,7 +34,7 @@ module InputReader
     resources
   end
 
-  def self.user_generated_content(filename)
+  def self.student_generated_content(filename)
     content = []
     CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
       content << row.field('Content')
@@ -42,7 +42,7 @@ module InputReader
     content
   end
 
-  def self.resources_usage(filename)
+  def self.activity_log(filename)
     #TODO: Monkeypatch value_in array
     user_models = {}
     CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|

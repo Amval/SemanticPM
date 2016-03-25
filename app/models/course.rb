@@ -1,5 +1,8 @@
 require 'csv'
 
+# TODO: Refactor this logic into components?
+# Logic outside of the Model.
+
 class Course < ActiveRecord::Base
 
   belongs_to :user
@@ -33,10 +36,19 @@ class Course < ActiveRecord::Base
     end
   end
 
+  # TODO: Refactor this horrible code
   def create_students
+    concepts = self.domain.concepts_list
+    # FIX: Hstore doesn't allow for nested hashes!!!!!!!
+    learning_resources = self.domain.learning_resources
     student_data = process_activity_log
     student_data.each do |key, value|
-      self.students.create(original_id: key, accessed_learning_resources: value)
+      accessed = value
+      resources = learning_resources.select { |key, _| accessed.include? key}
+      student_model = ActiveSupport::JSON.encode(Models::StudentModel.new(resources))
+      self.students.create(original_id: key,
+        accessed_learning_resources: accessed,
+        model: student_model)
     end
   end
 

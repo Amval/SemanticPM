@@ -4,7 +4,7 @@ class CoursesController < ApplicationController
   def create
     @course = current_user.courses.build(course_params)
     if @course.save
-      flash[:success] = @course.students
+      flash[:success] = "Couse created"
       redirect_to current_user
     else
       flash[:error] = "Course not created"

@@ -22,7 +22,7 @@ module InputReader
   def self.concepts(filename)
     resources = {}
 
-    CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
+    CSV.foreach(filename, headers: :first_row, col_sep: ';') do |row|
       if !row.fields.empty?
         res = row.field('ResourceId')
       if !resources.key?(res)
@@ -36,22 +36,17 @@ module InputReader
 
   def self.student_generated_content(filename)
     content = []
-    CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
+    CSV.foreach(filename, headers: :first_row, col_sep: ';') do |row|
       content << row.field('Content')
     end
     content
   end
 
   def self.activity_log(filename)
-    #TODO: Monkeypatch value_in array
     user_models = {}
-    CSV.foreach(filename, :headers => :first_row, :col_sep => ';') do |row|
+    CSV.foreach(filename, headers: :first_row, col_sep: ';') do |row|
       user_models.value_in_array(row.field('StudentId'), row.field('ResourceId'))
     end
     user_models
   end
-
-
 end
-
-

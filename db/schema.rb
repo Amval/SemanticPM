@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323212820) do
+ActiveRecord::Schema.define(version: 20160401114533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,12 +39,20 @@ ActiveRecord::Schema.define(version: 20160323212820) do
     t.json     "learning_resources"
   end
 
-  create_table "posts", force: :cascade do |t|
-    t.integer  "student_id"
-    t.text     "content",    null: false
-    t.float    "scores",     null: false, array: true
+  create_table "groups", force: :cascade do |t|
+    t.integer  "course_id",  null: false
+    t.float    "score",      null: false, array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "posts", force: :cascade do |t|
+    t.integer  "student_id"
+    t.text     "content",     null: false
+    t.float    "scores",                   array: true
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "original_id"
   end
 
   create_table "students", force: :cascade do |t|

@@ -194,6 +194,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    tokenator (0.2.2)
     turbolinks (2.3.0)
       coffee-rails
     tzinfo (1.2.2)
@@ -229,6 +230,7 @@ DEPENDENCIES
   semantic-ui-sass!
   spring (= 1.1.3)
   sqlite3 (= 1.3.9)
+  tokenator
   turbolinks (= 2.3.0)
   uglifier (= 2.5.3)
   web-console (= 2.0.0.beta3)

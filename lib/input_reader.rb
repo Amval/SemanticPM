@@ -35,11 +35,15 @@ module InputReader
   end
 
   def self.student_generated_content(filename)
-    content = []
+    posts = []
     CSV.foreach(filename, headers: :first_row, col_sep: ';') do |row|
-      content << row.field('Content')
+      post_data = {}
+      post_data["original_id"] = row.field('PostId')
+      post_data["student_id"] = row.field('StudentId')
+      post_data["content"] = row.field('Content')
+      posts << post_data
     end
-    content
+    posts
   end
 
   def self.activity_log(filename)

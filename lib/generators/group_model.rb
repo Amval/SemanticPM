@@ -3,9 +3,11 @@ module Generators
     attr_accessor :resources, :posts, :scores
     def initialize(course_id, uploader)
       super(course_id, uploader)
-      @resources = []
-      @posts = []
-      create
+      @resources = process_student_generated_content
+      @posts = create_posts
+      @scores = calculate_scores
+      score_posts
+      create_group
     end
 
     def create

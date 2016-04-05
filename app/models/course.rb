@@ -23,6 +23,7 @@ class Course < ActiveRecord::Base
   after_save :create_domain
   after_save :create_students, unless: Proc.new { |course| course.activity_log.url.nil? }
   after_save :create_group, unless: Proc.new { |course| course.student_generated_content.url.nil? }
+  after_save :update_domain, unless: Proc.new { |course| course.group.nil?}
 
   def create_domain
     Generators::DomainModel.new(id, concepts)
@@ -34,5 +35,15 @@ class Course < ActiveRecord::Base
 
   def create_group
     Generators::GroupModel.new(id, student_generated_content)
+  end
+
+  # TODO: Pass domain and group directly. This way is decoupled from DB.
+  def update_domain
+    Updaters::DomainModel.new(domain.id, group.id, 0.1)
+  end
+
+  def generate_candidates
+    cc = Generators::ConceptCandidates.new(domain_model: domain.model)
+    candidates = cc.candidates
   end
 end

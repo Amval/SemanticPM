@@ -43,7 +43,8 @@ class Course < ActiveRecord::Base
   end
 
   def generate_candidates
-    cc = Generators::ConceptCandidates.new(domain_model: domain.model)
+    cc = Generators::ConceptCandidates.new(domain_model: self.domain.model)
     candidates = cc.candidates
+    Generators::StudentCandidates.new(students: self.students)
   end
 end

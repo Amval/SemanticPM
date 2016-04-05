@@ -14,7 +14,7 @@ module Generators
       # Nodes with a zero (or low) score.
       @roots = find_starting_nodes(root_threshold)
       # Returns the candidates
-      @candidates = find_candidates(candidate_threshold)
+      @candidates = order_by_concept(find_candidates(candidate_threshold))
     end
 
 
@@ -36,11 +36,24 @@ module Generators
 
       # TODO: Account for strength of link between nodes when selecting neighbours.
       # For now, simplest case, just check all neighbours.
+      # Returns {root_concept => [concept_1,..., concept_n],...,root2 => [...]}
       def find_candidates(threshold)
         result = {}
         roots.map do |root|
           result[root.name] = root.adjacencies.keys.select do |node_name|
             nodes[node_name].state >= threshold
+          end
+        end
+        result
+      end
+
+      # Reverse cardinality of the candidates list.
+      # Returns {concept_1 => [root_1, ..., root_n], concept_2...}
+      def order_by_concept(candidates)
+        result = {}
+        candidates.each do |root_concept, list|
+          list.each do |concept|
+            result.value_in_array(concept, root_concept)
           end
         end
         result

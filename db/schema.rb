@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160401114533) do
+ActiveRecord::Schema.define(version: 20160407072423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160401114533) do
     t.datetime "updated_at",                               null: false
     t.string   "accessed_learning_resources", default: [],              array: true
     t.json     "model"
+    t.float    "posts_score",                                           array: true
   end
 
   add_index "students", ["course_id", "updated_at"], name: "index_students_on_course_id_and_updated_at", using: :btree

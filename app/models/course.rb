@@ -25,26 +25,38 @@ class Course < ActiveRecord::Base
   after_save :create_group, unless: Proc.new { |course| course.student_generated_content.url.nil? }
   after_save :update_domain, unless: Proc.new { |course| course.group.nil?}
 
+  # TODO: named parameters?
   def create_domain
-    Generators::DomainModel.new(id, concepts)
+    Generators::DomainModel.new(self.id, self.concepts)
   end
 
   def create_students
-    Generators::StudentModel.new(id, activity_log)
+    Generators::StudentModel.new(self.id, self.activity_log)
   end
 
   def create_group
-    Generators::GroupModel.new(id, student_generated_content)
+    Generators::GroupModel.new(self.id, self.student_generated_content)
   end
 
   # TODO: Pass domain and group directly. This way is decoupled from DB.
   def update_domain
-    Updaters::DomainModel.new(domain.id, group.id, 0.1)
+    Updaters::DomainModel.new(self.domain.id, self.group.id, 0.1)
+  end
+
+  def update_students
+    concepts_list = self.domain.concepts_list
+    self.students.each do |student|
+      Updaters::StudentModel.new(student: student , concepts_list: concepts_list)
+    end
   end
 
   def generate_candidates
-    cc = Generators::ConceptCandidates.new(domain_model: self.domain.model)
-    candidates = cc.candidates
-    Generators::StudentCandidates.new(students: self.students)
+    # To avoid querying the db twice?
+    domain_model = self.domain.model
+    cc = Generators::ConceptCandidates.new(domain_model: domain_model)
+    Generators::StudentCandidates.new(
+      students: self.students,
+      concept_candidates: cc.candidates,
+      domain_model: domain_model)
   end
 end

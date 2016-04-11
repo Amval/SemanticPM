@@ -14,12 +14,29 @@ class Student < ActiveRecord::Base
     self.save
   end
 
+  def deserialize_model
+    Models::StudentModel.from_json(self.model) unless self.model.nil?
+  end
+
   def get_learning_resources
     # Is this optimal? Does one or two queries to the DB? Could it be done in one?
     course = Course.find_by(id: self.course_id)
     learning_resources = course.domain.learning_resources
     # Rails method. Doesn't accept array as argument
     learning_resources.slice(*self.accessed_learning_resources)
+  end
+
+  # Use after deserialize model
+  def has_concept?(concept)
+    self.model.node_names.include?(concept)
+  end
+
+  def has_commented_concept?(concept)
+    self.posts_scores.include?(concept)
+  end
+
+  def posts_scores_for(array)
+    self.posts_scores.values_at(*array)
   end
 
 end

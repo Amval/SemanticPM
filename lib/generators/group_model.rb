@@ -48,7 +48,7 @@ module Generators
       def calculate_scores
         posts_content = posts.map { |post| post.content }
         concepts_list = Course.find_by(id: course_id).domain.concepts_list
-        Scoring::TfIdf.new(posts_content, concepts_list).to_v
+        Scoring::LogCount.new(posts_content, concepts_list).to_v
       end
 
       # Transform all vector scores (corresponding to each Post) into a single

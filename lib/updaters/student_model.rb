@@ -1,14 +1,14 @@
 module Updaters
   class StudentModel
-    attr_accessor :student
+    attr_accessor :student, :concepts_list
 
     def initialize(params)
       @student = params[:student]
-      #@concepts_list = params[:concepts_list]
+      @concepts_list = params[:concepts_list]
       @scores = calculate_avg_score
       #@model = Models::StudentModel.from_json(student.model)
       # Save updated Model
-      @student.posts_score = @scores
+      @student.posts_scores = @scores
       @student.save
     end
 
@@ -23,16 +23,14 @@ module Updaters
         # Divides by the number of posts
         avg = sum.map {|x| x > 0 ? x / sum.size.to_f : 0 }
         # Returns
+        Hash[concepts_list.zip(avg)]
       end
 
-      # Returns an Array containing all post scores for the Student.
+      # Returns a hash containing all post scores for the Student.
+      # { Concept => score }
       def get_post_scores
         self.student.posts.map { |post| post.scores}
       end
 
-      def update_model
-
-
-      end
   end
 end

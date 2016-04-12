@@ -15,7 +15,7 @@ class Student < ActiveRecord::Base
   end
 
   def deserialize_model
-    Models::StudentModel.from_json(self.model) unless self.model.nil?
+    self.model = Models::StudentModel.from_json(self.model) unless self.model.nil?
   end
 
   def get_learning_resources
@@ -27,12 +27,12 @@ class Student < ActiveRecord::Base
   end
 
   # Use after deserialize model
-  def has_concept?(concept)
+  def has_knowledge_about?(concept)
     self.model.node_names.include?(concept)
   end
 
-  def has_commented_concept?(concept)
-    self.posts_scores.include?(concept)
+  def has_commented?(concept)
+    self.posts_scores[concept].to_f > 0
   end
 
   def posts_scores_for(array)

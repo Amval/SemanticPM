@@ -54,9 +54,10 @@ class Course < ActiveRecord::Base
     # To avoid querying the db twice?
     domain_model = self.domain.model
     cc = Generators::ConceptCandidates.new(domain_model: domain_model)
-    Generators::StudentCandidates.new(
+    sc = Generators::StudentCandidates.new(
       students: self.students,
       concept_candidates: cc.candidates,
       domain_model: domain_model)
+    sc.evaluate_all_students
   end
 end

@@ -9,7 +9,7 @@ module Generators
       deserialize_students_models
 
       @concept_candidates = params[:concept_candidates]
-      @domain_model = params[:domain_model]
+      @domain_model = Models::DomainModel.from_json(params[:domain_model])
     end
 
     def deserialize_students_models
@@ -30,9 +30,9 @@ module Generators
     end
 
     def evaluate_candidate_concept(student, concept, roots)
-      return Hash[concept, 0] unless student.has_concept?(concept)
-      return Hash[concept, 0] if student.has_commented_concept?(concept)
-      concept_knowledge_ratio = student.model[concept].weight / domain_model[concept].weight
+      return Hash[concept, 0] unless student.has_knowledge_about?(concept)
+      return Hash[concept, 0] if student.has_commented?(concept)
+      concept_knowledge_ratio = student.model.nodes[concept].weight / domain_model.nodes[concept].weight
       comments_scores = student.posts_scores_for(roots)
       # TODO: Fix so scores are stored as floats and map is not necessary
       score = concept_knowledge_ratio + comments_scores.map {|x| x.to_f}.reduce(:+)

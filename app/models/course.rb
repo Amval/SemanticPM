@@ -24,6 +24,7 @@ class Course < ActiveRecord::Base
   after_save :create_students, unless: Proc.new { |course| course.activity_log.url.nil? }
   after_save :create_group, unless: Proc.new { |course| course.student_generated_content.url.nil? }
   after_save :update_domain, unless: Proc.new { |course| course.group.nil?}
+  after_save :update_students
 
   # TODO: named parameters?
   def create_domain

@@ -1,4 +1,5 @@
 module Generators
+  # TODO: Refactor and comment
   class GroupModel < Base
     attr_accessor :resources, :posts, :scores
     def initialize(course_id, uploader)
@@ -54,12 +55,12 @@ module Generators
       # Transform all vector scores (corresponding to each Post) into a single
       # one.
       def score_group
-        scores.map { |vector| vector.reduce(:+) / vector.size.to_f }
+        self.scores.map { |vector| vector.reduce(:+) / vector.size.to_f }
       end
 
       # Creates Group Model
       def create_group
-        Group.create(course_id: course_id, score: score_group)
+        Group.create(course_id: self.course_id, score: score_group)
       end
 
 

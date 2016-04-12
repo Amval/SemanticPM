@@ -13,14 +13,15 @@ module Generators
     end
 
     def deserialize_students_models
-      # TODO: Fix that some Students don't have a model
       self.students.each do |student|
         student.deserialize_model
       end
     end
 
     def evaluate_all_students
-      self.students.map { |student| evaluate_all_concept_candidates(student) unless student.model.nil?}
+      self.students.each_with_object({}) do |student, result|
+        result[student.id] = evaluate_all_concept_candidates(student)
+      end
     end
 
     def evaluate_all_concept_candidates(student)

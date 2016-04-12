@@ -2,12 +2,13 @@ module Scoring
   class LogCount < ScoreBase
     def initialize(collection, query)
       super(collection, query)
+      score_collection
     end
 
     def score_collection
       score_posts
       normalize_scores
-      zip_scores
+      #zip_scores
     end
 
     private

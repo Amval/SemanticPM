@@ -5,7 +5,7 @@ class Student < ActiveRecord::Base
   validates :course_id, presence: true
   validates :original_id, presence: true
   validates :accessed_learning_resources, presence: true
-  after_create :create_model, unless: Proc.new { |student| student.accessed_learning_resources.size < 2 }
+  after_create :create_model#, unless: Proc.new { |student| student.accessed_learning_resources.size < 2 }
 
   def create_model
     learning_resources = get_learning_resources
@@ -15,7 +15,7 @@ class Student < ActiveRecord::Base
   end
 
   def deserialize_model
-    self.model = Models::StudentModel.from_json(self.model) unless self.model.nil?
+    self.model = Models::StudentModel.from_json(self.model) if self.model.is_a? Hash
   end
 
   def get_learning_resources

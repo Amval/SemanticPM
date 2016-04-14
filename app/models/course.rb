@@ -59,6 +59,7 @@ class Course < ActiveRecord::Base
       students: self.students,
       concept_candidates: cc.candidates,
       domain_model: domain_model)
-    sc.evaluate_all_students
+    data = sc.evaluate_all_students
+    sc.choose_final_candidate(data)
   end
 end

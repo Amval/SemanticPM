@@ -61,8 +61,10 @@ module Generators
           choice = pick_concept(ordered_scores, i)
           if use_count.value_is_min?(choice)
             use_count.inc_value(choice)
-
-            result << [student_id, choice]
+            result << { id: student_id,
+                        concept: choice,
+                        root_concepts: concept_candidates[choice]
+                      }
             final_choice = true
           else
             i +=1

@@ -1,6 +1,7 @@
 class Student < ActiveRecord::Base
   belongs_to :course
   has_many :posts, dependent: :destroy
+  has_many :messages, dependent: :destroy
 
   validates :course_id, presence: true
   validates :original_id, presence: true

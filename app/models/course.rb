@@ -60,6 +60,8 @@ class Course < ActiveRecord::Base
       concept_candidates: cc.candidates,
       domain_model: domain_model)
     data = sc.evaluate_all_students
-    sc.choose_final_candidate(data)
+    candidates_info = sc.choose_final_candidates(data)
+    g = Generators::Messages.new(data: candidates_info)
+    #g.create_messages
   end
 end

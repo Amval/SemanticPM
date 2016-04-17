@@ -16,7 +16,7 @@ module Generators
         create_message(student_data)
       end
     end
-
+    # sdsd
     def create_message(student_data)
       student = find_student(student_data[:id])
       msg = generate_message(student_data)

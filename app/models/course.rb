@@ -51,7 +51,7 @@ class Course < ActiveRecord::Base
     end
   end
 
-  def generate_candidates
+  def generate_messages
     # To avoid querying the db twice?
     domain_model = self.domain.model
     cc = Generators::ConceptCandidates.new(domain_model: domain_model)
@@ -61,7 +61,7 @@ class Course < ActiveRecord::Base
       domain_model: domain_model)
     data = sc.evaluate_all_students
     candidates_info = sc.choose_final_candidates(data)
-    g = Generators::Messages.new(data: candidates_info)
-    #g.create_messages
+    g = Generators::Messages.new(data: candidates_info, course_id: self.id)
+    g.create_messages
   end
 end

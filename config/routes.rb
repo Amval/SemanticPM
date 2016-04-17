@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'help'    => 'static_pages#help'
   get 'about'   => 'static_pages#about'
   get 'signup'   => 'users#new'
+  post 'courses/generate_messages'   => 'courses#generate_messages'
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

@@ -14,9 +14,15 @@ class CoursesController < ApplicationController
   def destroy
   end
 
+  def generate_messages
+    @course = current_user.courses.find_by(id: params[:id])
+    @course.generate_messages
+    redirect_to current_user
+  end
+
   private
 
     def course_params
-      params.require(:course).permit(:name, :concepts, :activity_log, :student_generated_content)
+      params.require(:course).permit(:id,:name, :concepts, :activity_log, :student_generated_content)
     end
 end

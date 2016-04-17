@@ -2,11 +2,19 @@
   <div class="content">
     <a class="header">
       <%= course.name %>
-      <% if has_file? course.concepts %>
-        <div class="ui label">
-          <%= course.domain %>
-        </div>
-      <% end %>
     </a>
+    <%= button_to "Generate messages", controller: :courses, action: :generate_messages, id: course.id, jarl: "jarl" %>
+    <% course.students.each do |student| %>
+      <% if student.messages.any? %>
+        <div class="ui segment">
+        <div class="ui label">
+         ID: <%= student.original_id %>
+        </div>
+         <% student.messages.each do |msg| %>
+          <%= msg.content %>
+         <% end %>
+      </div>
+      <% end %>
+    <% end %>
   </div>
 </div>

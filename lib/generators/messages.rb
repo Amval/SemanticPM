@@ -6,9 +6,10 @@ module Generators
 
   # To resolve: Generates ONE message or EVERY message?
   class Messages
-    attr_reader :data
+    attr_reader :data, :course_id
     def initialize(params)
       @data = params[:data]
+      @course_id = params[:course_id]
     end
 
     def create_messages
@@ -16,7 +17,7 @@ module Generators
         create_message(student_data)
       end
     end
-    # sdsd
+
     def create_message(student_data)
       student = find_student(student_data[:id])
       msg = generate_message(student_data)
@@ -28,7 +29,7 @@ module Generators
     end
 
     def find_student(original_id)
-      Student.find_by(original_id: original_id)
+      Student.find_by(original_id: original_id, course_id: self.course_id)
     end
   end
 

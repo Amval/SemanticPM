@@ -3,7 +3,7 @@
     <a class="header">
       <%= course.name %>
     </a>
-    <%= button_to "Generate messages", controller: :courses, action: :generate_messages, id: course.id, jarl: "jarl" %>
+    <%= button_to "Create messages", controller: :courses, action: :create_messages, id: course.id, class: "ui primary button" %>
     <% course.students.each do |student| %>
       <% if student.messages.any? %>
         <div class="ui segment">

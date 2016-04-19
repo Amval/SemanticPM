@@ -1,6 +1,7 @@
 module Generators
   # TODO: Document properly. Define styleguide
-  # TODO: Refactor
+  # TODO: Refactor. Choose_final_candidates is HORRIBLE.
+  # Idea: Redo with iterators. iter.next()
   # TODO: Define better strategies
   # Assigns a Student to a Concept and returns pairs of
   # [Student, Concept]
@@ -13,7 +14,7 @@ module Generators
       @students = params[:students].sort_by { |s| s.posts.size}
       deserialize_students_models
       @concept_candidates = params[:concept_candidates]
-      @domain_model = Models::DomainModel.from_json(params[:domain_model])
+      @domain_model = params[:domain_model]
     end
 
     # Ask all Student objects to deserialize its model

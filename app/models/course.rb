@@ -51,17 +51,22 @@ class Course < ActiveRecord::Base
     end
   end
 
-  def generate_messages
+  def create_messages
     # To avoid querying the db twice?
-    domain_model = self.domain.model
+    domain_model = Models::DomainModel.from_json(self.domain.model)
     cc = Generators::ConceptCandidates.new(domain_model: domain_model)
     sc = Generators::StudentCandidates.new(
       students: self.students,
       concept_candidates: cc.candidates,
       domain_model: domain_model)
+    # TODO: Refactor this couple of lines
     data = sc.evaluate_all_students
-    candidates_info = sc.choose_final_candidates(data)
-    g = Generators::Messages.new(data: candidates_info, course_id: self.id)
-    g.create_messages
+    messages_info = sc.choose_final_candidates(data)
+    messages_info.each do |msg_info|
+      Generators::Messages.new(
+        msg_info: msg_info,
+        course_id: self.id,
+        domain: self.domain)
+    end
   end
 end

@@ -3,7 +3,7 @@ module Generators
     attr_reader :nodes, :states, :roots, :candidates
 
     def initialize(params)
-      @domain_model = Models::DomainModel.from_json(params[:domain_model])
+      @domain_model = params[:domain_model]
       @nodes = @domain_model.nodes
       # Threshold score (state) to consider a node root.
       root_threshold = params[:root_threshold] || 0.2

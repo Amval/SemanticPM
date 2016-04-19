@@ -14,9 +14,9 @@ class CoursesController < ApplicationController
   def destroy
   end
 
-  def generate_messages
+  def create_messages
     @course = current_user.courses.find_by(id: params[:id])
-    @course.generate_messages
+    @course.create_messages
     redirect_to current_user
   end
 

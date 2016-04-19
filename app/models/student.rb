@@ -32,8 +32,14 @@ class Student < ActiveRecord::Base
     self.model.node_names.include?(concept)
   end
 
+  # Returns true if the post_score for a concept is bigger than 0
   def has_commented?(concept)
     self.posts_scores[concept].to_f > 0
+  end
+
+  # Returns a boolean array of commented concepts
+  def has_commented_set?(concepts)
+    concepts.map { |c| has_commented?(c) }
   end
 
   def posts_scores_for(array)

@@ -37,9 +37,9 @@ class Student < ActiveRecord::Base
     self.posts_scores[concept].to_f > 0
   end
 
-  # Returns a boolean array of commented concepts
+  # Returns an array containing the concepts that have been commented by the student.
   def has_commented_set?(concepts)
-    concepts.map { |c| has_commented?(c) }
+    concepts.select { |c| has_commented?(c) }
   end
 
   def posts_scores_for(array)

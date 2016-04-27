@@ -3,6 +3,12 @@ require 'csv'
 # TODO: Refactor this logic into components?
 # Logic outside of the Model.
 
+# Defines the relationships between model.
+# A course is created through a set of input files:
+# - Concepts: List of manually tagged 3-uples <ResourceID, Concept, Score>
+# - ActivityLog: List of pairs <StudentId,ResourceID>
+# - StudentGeneratedContent: List of 3-uples <PostID, StudentID, Content>
+# containing forum posts
 class Course < ActiveRecord::Base
   # Relationships
   belongs_to :user
@@ -10,11 +16,13 @@ class Course < ActiveRecord::Base
   has_one :group, dependent: :destroy
   has_many :students, dependent: :destroy
 
+  # Uploaders
   default_scope -> { order(created_at: :desc) }
   mount_uploader :concepts, ConceptsUploader
   mount_uploader :activity_log, ActivityLogUploader
   mount_uploader :student_generated_content, StudentGeneratedContentUploader
 
+  # Validations
   validates :user_id, presence: true
   validates :name, presence: true, length: { minimum: 6, maximum: 140 }
   validates :concepts, presence: true
@@ -26,22 +34,24 @@ class Course < ActiveRecord::Base
   after_save :update_domain, unless: Proc.new { |course| course.group.nil?}
   after_save :update_students
 
-  # TODO: named parameters?
+  # Calls Domain Model Generator
   def create_domain
-    Generators::DomainModel.new(self.id, self.concepts)
+    Generators::DomainModel.new(course_id: self.id, uploader: self.concepts)
   end
 
+  # Calls Student Model Generator
   def create_students
-    Generators::StudentModel.new(self.id, self.activity_log)
+    Generators::StudentModel.new(course_id: self.id, uploader: self.activity_log)
   end
 
+  # Calls Group Model Generator
   def create_group
-    Generators::GroupModel.new(self.id, self.student_generated_content)
+    Generators::GroupModel.new(course_id: self.id, uploader: self.student_generated_content)
   end
 
-  # TODO: Pass domain and group directly. This way is decoupled from DB.
+  # Calls Domain Updater
   def update_domain
-    Updaters::DomainModel.new(self.domain.id, self.group.id, 0.1)
+    Updaters::DomainModel.new(domain: self.domain, group: self.group)
   end
 
   def update_students

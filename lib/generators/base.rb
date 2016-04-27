@@ -1,12 +1,15 @@
 module Generators
+  # Base class for processing input files and creating their respective
+  # Models.
   class Base
     attr_reader :uploader, :course_id, :mounted_file
-    def initialize(course_id, uploader)
-      @course_id = course_id
-      @uploader = uploader
+    def initialize(params)
+      @course_id = params[:course_id]
+      @uploader = params[:uploader]
       @mounted_file = uploader.mounted_as
 
-      # Defines a method to process data file
+      # Defines a proxy method to process data file using InputReader
+      # through dynamic dispatch
       self.class.send(:define_method, "process_#{mounted_file}") do
         unless uploader.url.nil?
           url = "#{Dir.pwd}/public#{uploader.url}"
@@ -15,7 +18,6 @@ module Generators
       end
     end
 
-    def create
-    end
+
   end
 end

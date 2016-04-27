@@ -1,9 +1,12 @@
 module Generators
-  # TODO: Refactor and comment
+  # Process the input file (StudentGeneratedContent) and creates an ActiveRecord Group Model,
+  # which also contains a serialized Semantic Model.
+
+  # TODO: Improve scoring method
   class GroupModel < Base
     attr_accessor :resources, :posts, :scores
-    def initialize(course_id, uploader)
-      super(course_id, uploader)
+    def initialize(params)
+      super(params)
       @resources = process_student_generated_content
       @posts = create_posts
       @scores = calculate_scores
@@ -11,6 +14,7 @@ module Generators
       create_group
     end
 
+    # Invokes the file processing and Model creation process
     def create
       self.resources = process_student_generated_content
       self.posts = create_posts

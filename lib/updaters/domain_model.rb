@@ -1,18 +1,20 @@
 module Updaters
+  # Updates Domain Model, assigning a percentage score to every concept (node).
+  # This score indicates if a concept has been discussed enough or nt
   class DomainModel
     attr_accessor :domain, :group, :percentage
 
-    def initialize(domain_id, group_id, percentage)
-      @domain = Domain.find_by(id: domain_id)
-      @group = Group.find_by(id: group_id)
-      @percentage = percentage
+    def initialize(params)
+      @domain = params[:domain]
+      @group = params[:group]
+      @percentage = params[:percentage] || 0.1
       check_nodes
       domain.save
-
     end
 
     private
 
+    # Assigns a state to every node
       def check_nodes
         nodes = domain.model['nodes']
         nodes.each_with_index do |(key, value), index |

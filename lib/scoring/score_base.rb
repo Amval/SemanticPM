@@ -1,6 +1,3 @@
-require 'tokenator'
-require 'matrix'
-
 # TODO: Refactor and comment.
 # This is a mess...
 # Determine public and private interface
@@ -16,8 +13,11 @@ module Scoring
       @collection = collection
       # List of words to look for in text
       @query = query
-
-      @tk = Tokenator.new
+      options = {
+        punctuation: :none,
+        expand_contractions: true
+      }
+      @tk = PragmaticTokenizer::Tokenizer.new(options)
       # Query vector with initial 0 scores
       @query_mask = vector_mask
       # Tokenised collection

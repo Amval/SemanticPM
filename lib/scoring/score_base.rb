@@ -4,7 +4,10 @@
 # It's possible that I have to redo it anyway, since TfIdf based mthods
 # are really stupid for this use case...
 
+# Contains scoring related classes.
 module Scoring
+  # Base class for scoring methods. Allows for the implementation of different
+  # strategies
   class ScoreBase
     attr_accessor :posts, :query_mask, :scores
     attr_reader :collection, :query, :strategy, :tk

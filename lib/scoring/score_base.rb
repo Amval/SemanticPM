@@ -1,65 +1,43 @@
-# TODO: Refactor and comment.
-# This is a mess...
-# Determine public and private interface
-# It's possible that I have to redo it anyway, since TfIdf based mthods
-# are really stupid for this use case...
-
+require 'matrix'
 # Contains scoring related classes.
 module Scoring
   # Base class for scoring methods. Allows for the implementation of different
   # strategies
+  # @param collection [Posts] - collection of posts to be scored
+  # @param query [Array of String] - Words to search
   class ScoreBase
-    attr_accessor :posts, :query_mask, :scores
-    attr_reader :collection, :query, :strategy, :tk
+    attr_accessor :tf_matrix, :counter
+    attr_reader :collection, :query
 
     def initialize(collection, query)
       @collection = collection
-      # List of words to look for in text
-      @query = query
-      options = {
-        punctuation: :none,
-        expand_contractions: true
-      }
-      @tk = PragmaticTokenizer::Tokenizer.new(options)
-      # Query vector with initial 0 scores
-      @query_mask = vector_mask
-      # Tokenised collection
-      @posts = process_collection
-      @scores = {}
+      # Word counter with stemming and multi-word partial matches
+      @counter = Counter::Words.new(query)
+      @tf_matrix = calculate_tf_matrix
     end
 
-    def process_collection
-      collection.map { |doc| tk.tokenize(doc).map(&:downcase) }
+    # Transform text into a vector containing the number of ocurrences of
+    # a query.
+    def to_vsm(post)
+      counter.count(post).values
     end
 
-    def vector_mask
-      query.each_with_object({}) { |concept, hash| hash[concept] = 0}
+    #
+    def calculate_tf_matrix
+      vector_scores = collection.map { |post| to_vsm(post) }
+      Matrix[*vector_scores]
     end
 
-     def text_to_vector(post)
-      mask = query_mask.clone
-      post.each do |word|
-        mask[word] += 1 if mask.include? word
-      end
-      mask
-    end
-
-    def zip_scores
-      Matrix[*scores.values].transpose.to_a
-    end
-
-    def score_collection
+    # Abstract method to implement different weighting schemes to transform
+    # the tf_matrix
+    def calculate_score_matrix(collection)
       raise NotImplementedError, "Instance a subclass "
     end
 
-    # The scores are stored as follows:
-    # concept_a => [1..n]
-    # concept_z => [1..n]
-    # This functions joins all the score arrays into a Matrix and transposes
-    # them. The result is a collection of arrays, which represent the scores for
-    # the Query for every document in Collection
-    def to_v
-      Matrix[*scores.values].transpose.to_a
+    # Abstract method to implement different weighting schemes to obtain the
+    # total collection score
+    def calculate_group_score(collection)
+      raise NotImplementedError, "Instance a subclass "
     end
 
   end

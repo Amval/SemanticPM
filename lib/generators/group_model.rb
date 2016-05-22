@@ -8,20 +8,17 @@ module Generators
     def initialize(params)
       super(params)
       @resources = process_student_generated_content
-      @posts = create_posts
-      @scores = calculate_scores
-      score_posts
+      #@posts = create_posts
+      # Score posts
+      # Only the post text is processed
+      collection = resources.map { |post| post['content'] }
+      # The list of Domain concepts is used as a query to score the posts
+      query = Course.find_by(id: course_id).domain.concepts_list
+      @scores = Scoring::LogCount.new(collection, query)
+      create_posts
       create_group
     end
 
-    # Invokes the file processing and Model creation process
-    def create
-      self.resources = process_student_generated_content
-      self.posts = create_posts
-      self.scores = calculate_scores
-      score_posts
-      create_group
-    end
 
     private
 
@@ -29,42 +26,21 @@ module Generators
       # Every Post is associated to its corresponding Student.
       def create_posts
         posts = []
-        resources.each do |post_data|
+        scores = self.scores.score_matrix.to_a
+        self.resources.each_with_index do |post_data, i|
           # FIX: Student id nil
           student_id = Student.where(
             original_id: post_data["student_id"],
             course_id: course_id).pluck(:id)
 
           post_data['student_id'] = student_id[0].to_i
-          posts << Post.create(post_data)
+          post_data['scores'] = scores[i]
         end
-        posts
-      end
-
-      # Assigns a vector score to every Post
-      def score_posts
-        posts.each_with_index do |post, i|
-          post.scores = scores[i]
-          post.save
-        end
-      end
-
-      # Calculates the vector Score for every Post
-      def calculate_scores
-        posts_content = posts.map { |post| post.content }
-        concepts_list = Course.find_by(id: course_id).domain.concepts_list
-        Scoring::LogCount.new(posts_content, concepts_list).to_v
-      end
-
-      # Transform all vector scores (corresponding to each Post) into a single
-      # one.
-      def score_group
-        self.scores.map { |vector| vector.reduce(:+) / vector.size.to_f }
       end
 
       # Creates Group Model
       def create_group
-        Group.create(course_id: self.course_id, score: score_group)
+        Group.create(course_id: self.course_id, score: self.scores.group_score)
       end
 
 

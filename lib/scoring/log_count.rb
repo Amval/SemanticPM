@@ -1,49 +1,25 @@
 module Scoring
   class LogCount < ScoreBase
+    attr_accessor :score_matrix, :group_score
     def initialize(collection, query)
       super(collection, query)
-      score_collection
+      @score_matrix = calculate_score_matrix
+      @group_score = calculate_group_score
     end
 
-    def score_collection
-      score_posts
-      normalize_scores
-      #zip_scores
-    end
-
-    private
-    def tf(term, freq)
-      if freq > 0
-        1 + Math.log(freq)
-      else
-        0
+    # Transforms the tf_matrix into a score matrix using log normalization
+    # as a Weighting Scheme
+    def calculate_score_matrix
+      # Esto no funciona :(
+      tf_matrix.to_a.map do |v|
+        v.map { |i| i > 0 ? (1 + Math.log10(i)) : 0 }
       end
     end
 
-    def tf_term(post, term)
-      vector = text_to_vector(post)
-      freq = vector[term]
-      tf_score = tf(term, freq)
-    end
-
-
-    def score_posts
-      query.each do |concept|
-        scores[concept] = posts.map { |post| tf_term(post, concept) }
-      end
-    end
-
-    def normalize(term)
-      cosine = calculate_cosine(term)
-      term.map { |item| cosine > 0 ? (item / cosine) : 0 }
-    end
-
-    def calculate_cosine(term)
-      Math.sqrt(term.reduce(0) { |total, item| total += item * item })
-    end
-
-    def normalize_scores
-      scores.each { |key, value| scores[key] = normalize(value) }
+    # Reduces the matrix into a single vector by adding all the columns and
+    # then dividides by the avg number
+    def calculate_group_score
+      score_matrix.transpose.to_a.map {|v| v.reduce(&:+).to_f / v.size}
     end
 
   end

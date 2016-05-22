@@ -17,7 +17,5 @@ module Generators
         end
       end
     end
-
-
   end
 end

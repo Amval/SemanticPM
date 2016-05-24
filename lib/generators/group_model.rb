@@ -30,11 +30,13 @@ module Generators
         self.resources.each_with_index do |post_data, i|
           # FIX: Student id nil
           student_id = Student.where(
-            original_id: post_data["student_id"],
+            # The original id in the Student is flagged as Student_id in the post
+            original_id: post_data['student_id'],
             course_id: course_id).pluck(:id)
 
           post_data['student_id'] = student_id[0].to_i
           post_data['scores'] = scores[i]
+          Post.create(post_data)
         end
       end
 

@@ -6,8 +6,8 @@ module Generators
       @domain_model = params[:domain_model]
       @nodes = @domain_model.nodes
       # Threshold score (state) to consider a node root.
-      root_threshold = params[:root_threshold] || 0.2
-      candidate_threshold = params[:candidate_threshold] || 0.95
+      root_threshold = params[:root_threshold] || 0.15
+      candidate_threshold = params[:candidate_threshold] || 0.85
       # Pairs of [node.name, node.state] sorted from zero (discussed) to one
       # (non-discussed).
       @states = collect_node_states

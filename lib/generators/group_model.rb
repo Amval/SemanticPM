@@ -25,18 +25,14 @@ module Generators
       # Creates a Post model and saves into the DB frm the student_generated_content.
       # Every Post is associated to its corresponding Student.
       def create_posts
-        posts = []
         scores = self.scores.score_matrix.to_a
         self.resources.each_with_index do |post_data, i|
           # FIX: Student id nil
-          student_id = Student.where(
-            # The original id in the Student is flagged as Student_id in the post
+          student = Student.find_by(
             original_id: post_data['student_id'],
-            course_id: course_id).pluck(:id)
-
-          post_data['student_id'] = student_id[0].to_i
+            course_id: course_id)
           post_data['scores'] = scores[i]
-          Post.create(post_data)
+          student.posts.create(post_data)
         end
       end
 
@@ -44,7 +40,5 @@ module Generators
       def create_group
         Group.create(course_id: self.course_id, score: self.scores.group_score)
       end
-
-
   end
 end

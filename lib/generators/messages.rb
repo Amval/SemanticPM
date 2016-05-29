@@ -40,7 +40,7 @@ module Generators
           roots = self.student.has_commented_set?(self.root_concepts)
           if roots.size > 0
             # Show student which related concepts has he commented.
-            msg << message_db(msg: :commented, plural: roots.size > 1)
+            msg << message_db(msg: :commented, plural: roots.size > 1, root_concepts: roots)
           else
             # Ends sentence if he hasn't commented any.
             msg << '. '

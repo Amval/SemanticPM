@@ -14,7 +14,7 @@ gem 'semantic-ui-sass', github: 'doabit/semantic-ui-sass'
 gem 'carrierwave',  '0.10.0'
 gem 'pragmatic_tokenizer'
 gem 'ruby-stemmer'
-gem 'amatch'
+gem 'levenshtein-ffi'
 
 group :development, :test do
   gem 'sqlite3',     '1.3.9'

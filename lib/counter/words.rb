@@ -1,4 +1,5 @@
 require 'lingua/stemmer'
+require 'levenshtein'
 
 module Counter
   # Counts the number of times a set of words appear in a text.
@@ -7,7 +8,6 @@ module Counter
   # @attr_reader stemmer [Lingua::Stemmer] Reduces words to their roots.
   # @attr_reader tk [PragmaticTokenizer::Tokenizer] Split strings into arrays of words.
   class Words
-    include Amatch
     attr_reader :ref_wordset, :stemmer, :tk
 
     # Instantiates a Stemmer, Tokenizer and preprocess wordset
@@ -45,12 +45,12 @@ module Counter
           # Multiword string
           if segmented.size > 1
             matchers = segmented.each_with_object([]) do |segment, res|
-              res << Sellers.new(self.stemmer.stem(segment.downcase))
+              res << self.stemmer.stem(segment.downcase)
             end
             result[word] = matchers
           # One word string
           else
-            result[word] = Sellers.new(self.stemmer.stem(word.downcase))
+            result[word] = self.stemmer.stem(word.downcase)
           end
         end
       end
@@ -64,14 +64,20 @@ module Counter
       # Given a matcher and a collection of words, returns the number of words
       # within a distance of the matcher
       def count_simple_matches(matcher, words, distance = 1)
-        matcher.match(words).select { |x| x <= distance }.size
+        words.select { |word| Levenshtein.distance(matcher, word) <= distance }.size
+      end
+
+      # Given a matcher and a collection of words, returns an array of the edit
+      # distance between matcher and collection.
+      def calculate_distances(matcher, words)
+        words.map { |word| Levenshtein.distance(matcher, word) }
       end
 
       # Given a matcher and a collection of words, returns the number of words
       # within a distance of the matcher
       def count_multiword_matches(matchers, words, distance = 1)
         # Calculates match scores for each matcher (individual word)
-        matchers = matchers.map { |m| m.match(words) }
+        matchers = matchers.map { |m| calculate_distances(m, words) }
         # Selects the position of the words within a distance of the matcher
         matchers = matchers.map { |m| m.each_index.select { |i| m[i] <= distance } }
         # For a multiword match to occur, there needs to be consecutive individual matches

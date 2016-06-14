@@ -20,6 +20,12 @@ class CoursesController < ApplicationController
     redirect_to current_user
   end
 
+  def create_domain_graph
+    @course = current_user.courses.find_by(id: params[:id])
+    @course.create_domain_graph
+    redirect_to current_user
+  end
+
   private
 
     def course_params

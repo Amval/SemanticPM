@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'about'   => 'static_pages#about'
   get 'signup'   => 'users#new'
   post 'courses/create_messages'   => 'courses#create_messages'
+  post 'courses/create_domain_graph'   => 'courses#create_domain_graph'
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

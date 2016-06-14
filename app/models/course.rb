@@ -79,4 +79,10 @@ class Course < ActiveRecord::Base
         domain: self.domain)
     end
   end
+
+  def create_domain_graph
+    domain_model = Models::DomainModel.from_json(self.domain.model)
+    filename = "#{self.name}-#{self.id}"
+    domain_model.to_image(filename)
+  end
 end

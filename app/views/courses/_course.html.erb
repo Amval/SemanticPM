@@ -4,6 +4,7 @@
       <%= course.name %>
     </a>
     <%= button_to "Create messages", controller: :courses, action: :create_messages, id: course.id, class: "ui primary button" %>
+    <%= button_to "Create Domain Graph", controller: :courses, action: :create_domain_graph, id: course.id, class: "ui primary button" %>
     <% course.students.each do |student| %>
       <% if student.messages.any? %>
         <div class="ui segment">

@@ -95,12 +95,12 @@ module Generators
           'ENG': {
             'greeting': "Hello, <#{params[:id]}>. The concept <#{concept}> hasn't been discussed enough. ",
             'knowledge': "It seems that you have knowledge about <#{concept}>",
-            'commented': "and you have also commented about the related concept#{'s' if params[:plural]} #{root_concepts}.",
+            'commented': "and you have also commented about the related concept#{'s' if params[:plural]} #{root_concepts}. ",
             'recommend': "Why don't you write something about it? You can expand your knowledge on <#{concept}> through the following resource#{'s' if params[:plural]}:
               #{params[:resources]}",
             'recommend_new': "You can learn about <#{concept}> through the following resources:
               #{params[:resources]}",
-            'read_all': "You also have consulted all the learning resources regarding <#{concept}>."
+            'read_all': "You also have consulted all the learning resources regarding <#{concept}>. "
           }
         }
         return template[lang][params[:msg]]

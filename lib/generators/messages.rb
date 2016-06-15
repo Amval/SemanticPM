@@ -1,7 +1,7 @@
 module Generators
   # Generates a list of messages from the following information
   # student [Models::Student]
-  # candidate_concpt { concept => [root_concepts] } [ Hash of Strings]
+  # candidate_concept { concept => [root_concepts] } [ Hash of Strings]
   #
   class Messages
     attr_accessor :msg

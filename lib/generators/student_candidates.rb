@@ -1,8 +1,6 @@
 module Generators
   # TODO: Document properly. Define styleguide
-  # TODO: Refactor. Choose_final_candidates is HORRIBLE.
   # Idea: Redo with iterators. iter.next()
-  # TODO: Define better strategies
   # Assigns a Student to a Concept and returns pairs of
   # [Student, Concept]
   class StudentCandidates

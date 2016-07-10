@@ -22,7 +22,8 @@ module Scoring
       counter.count(post).values
     end
 
-    #
+    # Returns a matrix containing the number of occurrences of each term
+    # across the collection of posts.
     def calculate_tf_matrix
       vector_scores = collection.map { |post| to_vsm(post) }
       Matrix[*vector_scores]

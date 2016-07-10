@@ -1,5 +1,5 @@
 module Scoring
-  class LogCount < ScoreBase
+  class MaximumTfNormalization < ScoreBase
     attr_accessor :score_matrix, :group_score
     def initialize(collection, query)
       super(collection, query)
@@ -7,12 +7,18 @@ module Scoring
       @group_score = calculate_group_score
     end
 
-    # Transforms the tf_matrix into a score matrix using log normalization
+    # Transforms the tf_matrix into a score matrix using maximum tf normalization
     # as a Weighting Scheme
-    def calculate_score_matrix
-      # Esto no funciona :(
+    def calculate_score_matrix(a = 0.4)
       tf_matrix.to_a.map do |v|
-        v.map { |tf_t| tf_t > 0 ? (1 + Math.log10(tf_t)) : 0 }
+        tf_max = v.max
+        v.map do |tf_t|
+          if tf_max > 0
+            a + (1 - a) * ( tf_t / tf_max)
+          else
+            0
+          end
+        end
       end
     end
 

@@ -4,6 +4,7 @@ class StaticPagesController < ApplicationController
   end
 
   def help
+    render json: "help"
   end
 
   def about

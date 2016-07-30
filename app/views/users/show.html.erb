@@ -3,7 +3,13 @@
 <h1>
   <%= gravatar_for @user %>
   <%= @user.name %>
+
 </h1>
+
+<div class="ui segment">
+  Authentication Token (API): <i><%= @user.auth_token %></i>
+</div>
+
 <%= render 'shared/courses_form' %>
 
 <div class="ui relaxed divided list">

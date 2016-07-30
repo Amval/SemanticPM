@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   attr_accessor :remember_token
   has_many :courses, dependent: :destroy
 
+  before_save :set_auth_token
+
   before_save { self.email = email.downcase }
   validates :name, presence: true, length: { maximum: 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -35,4 +37,13 @@ class User < ActiveRecord::Base
     update_attribute(:remember_digest, nil)
   end
 
+  private
+    def set_auth_token
+      return if auth_token.present?
+      self.auth_token = generate_auth_token
+    end
+
+    def generate_auth_token
+      SecureRandom.uuid.gsub(/\-/,'')
+    end
 end

@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20160728093043) do
     t.datetime "updated_at",                               null: false
     t.string   "accessed_learning_resources", default: [],              array: true
     t.json     "model"
+    t.float    "posts_score",                                           array: true
     t.hstore   "posts_scores"
   end
 

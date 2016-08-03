@@ -15,5 +15,11 @@ Rails.application.routes.draw do
   resources :users
   resources :courses, only: [:create, :destroy]
 
-
+  constraints subdomain: 'api' do
+    namespace :api, path: '/' do
+      namespace :v1, path: '/v1' do
+        resources :courses
+      end
+    end
+  end
 end

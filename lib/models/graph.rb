@@ -116,11 +116,11 @@ module Models
       def print_node(f, name)
         current_node = nodes[name]
         color = assign_color_to_node(current_node)
-        f.puts %(   #{name} [label="#{name}: #{current_node.weight}"] #{assign_color_to_node(current_node)})
+        f.puts %(   "#{name}" [label="#{name}: #{current_node.weight}"] #{assign_color_to_node(current_node)})
         # Writes down its neighbours
         reduced_adj = reduced_adjacency_list(name)
           reduced_adj.each do |neighbour, weight|
-            f.puts %(   #{name} -- #{neighbour}[label="#{weight}"])
+            f.puts %(   "#{name}" -- "#{neighbour}"[label="#{weight}"])
           end
       end
 

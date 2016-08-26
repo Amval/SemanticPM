@@ -14,7 +14,8 @@ module Generators
       collection = resources.map { |post| post['content'] }
       # The list of Domain concepts is used as a query to score the posts
       query = Course.find_by(id: course_id).domain.concepts_list
-      @scores = Scoring::LogCount.new(collection, query)
+      @scores = Scoring::MaximumTfNormalization.new(collection, query)
+
       create_posts
       create_group
     end

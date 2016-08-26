@@ -51,7 +51,7 @@ module Models
         matrix = matrix.map { |x| normalize_value(x, min, max).round(3) }
         # Stops any value in the diagonal from being 0
         matrix.each_with_index(:diagonal) do |item, i|
-          matrix.send(:[]=, i, i, (item + 0.1) ) if item > 0
+          matrix.send(:[]=, i, i, (item + 0.1) ) if item == 0
         end
       end
 

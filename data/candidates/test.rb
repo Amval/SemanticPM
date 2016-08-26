@@ -17,7 +17,7 @@ end
 
 m = normalize_matrix(m)
 m.each_with_index(:diagonal) do |item, i|
-  m.send(:[]=, i, i, item + 100 ) if item > 0
+  m.send(:[]=, i, i, item + 0.1 ) if item > 0
 end
 
 p m

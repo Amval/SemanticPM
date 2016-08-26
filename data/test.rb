@@ -3,3 +3,5 @@ def log_count(n)
 end
 
 p log_count(0)
+
+p [1,2,3,4].max

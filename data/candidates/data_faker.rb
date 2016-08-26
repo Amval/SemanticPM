@@ -37,6 +37,5 @@ module DataFaker
   end
 end
 
- m =  DataFaker::fake(10, 4)
-DataFaker::prettify(m)
+m =  DataFaker::fake(10, 4)
 p m

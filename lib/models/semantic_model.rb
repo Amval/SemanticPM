@@ -13,7 +13,8 @@ module Models
       concepts = collect_concepts(resources)
       # Calculates the submatrix M
       matrix = Matrix.rows(resources.map { |resource| generate_row(concepts, resource) })
-      super(concepts, normalized_concepts_matrix(matrix))
+      super(concepts, normalize(concepts_matrix(matrix)))
+      #super(concepts, normalized_concepts_matrix(matrix))
     end
 
     private
@@ -37,6 +38,26 @@ module Models
       #def resources_matrix
       #  matrix * matrix_t
       #end
+
+      # Standard normalization formila
+      def normalize_value(x, min, max)
+        ( x - min ) / (max - min )
+      end
+
+      # Applies nomalization formula to the matrix
+      def normalize(matrix)
+        max = matrix.max
+        min = matrix.min
+        matrix = matrix.map { |x| normalize_value(x, min, max).round(3) }
+        # Stops any value in the diagonal from being 0
+        matrix.each_with_index(:diagonal) do |item, i|
+          matrix.send(:[]=, i, i, (item + 0.1) ) if item > 0
+        end
+      end
+
+
+      # DEPRECATED
+
 
       # Calculates the product of M^T * M and multiplies diagonal by normalizing
       # factor.
@@ -73,4 +94,3 @@ module Models
       end
   end
 end
-

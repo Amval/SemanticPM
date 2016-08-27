@@ -1,7 +1,8 @@
-def log_count(n)
-  1 + Math.log(n)
+a = ["a","b","c"]
+
+def pretty_print(resources)
+  resources.map { |item| "<#{item}>"}
+  resources.to_sentence
 end
 
-p log_count(0)
-
-p [1,2,3,4].max
+p pretty_print(a)

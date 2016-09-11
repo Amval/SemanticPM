@@ -70,8 +70,7 @@ class Course < ActiveRecord::Base
       concept_candidates: cc.candidates,
       domain_model: domain_model)
     # TODO: Refactor this couple of lines
-    data = sc.evaluate_all_students
-    messages_info = sc.choose_final_candidates(data)
+    messages_info = sc.assign_candidates
     messages_info.each do |msg_info|
       Generators::Messages.new(
         msg_info: msg_info,

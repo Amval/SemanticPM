@@ -1,8 +1,3 @@
-a = ["a","b","c"]
+concept_candidates = {"kreativität"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik"], "SIAM"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik", "stimulierung", "brainwriting", "individuell"], "ideengenerierung"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik", "stimulierung", "brainwriting", "individuell"], "kommunikation"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik", "stimulierung", "brainwriting", "individuell"], "zwei-phasen-prozess"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik"], "gedankengänge"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik", "stimulierung", "brainwriting"], "clusteranzahl"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik"], "clusterlänge"=>["brainstorming", "gruppen", "leistungsverlust", "bewertungsangst", "kritik"], "störung"=>["brainstorming", "gruppen", "bewertungsangst", "stimulierung", "brainwriting", "individuell"], "produktivität"=>["brainstorming", "gruppen", "bewertungsangst", "stimulierung", "brainwriting"], "arbeitsgedächtnis"=>["brainstorming", "gruppen", "bewertungsangst", "stimulierung", "brainwriting", "individuell"], "langzeitgedächtnis"=>["brainstorming", "gruppen", "bewertungsangst", "stimulierung", "brainwriting", "individuell"], "sequenz"=>["brainstorming", "gruppen", "bewertungsangst", "stimulierung", "brainwriting"], "lehrmethod"=>["brainstorming", "gruppen", "bewertungsangst", "brainwriting", "individuell"], "kreative prozesse"=>["brainstorming", "gruppen", "bewertungsangst", "brainwriting", "individuell"], "leistungsvergleich"=>["brainstorming", "gruppen", "bewertungsangst", "brainwriting", "individuell"], "parallel"=>["brainstorming", "gruppen", "bewertungsangst", "brainwriting", "individuell"], "arbeitsgedäcthniss"=>["brainstorming"]} 
 
-def pretty_print(resources)
-  resources.map { |item| "<#{item}>"}
-  resources.to_sentence
-end
-
-p pretty_print(a)
+concept_candidates.map { |k,v| puts k}

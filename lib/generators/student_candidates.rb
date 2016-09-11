@@ -4,7 +4,7 @@ module Generators
   # Assigns a Student to a Concept and returns pairs of
   # [Student, Concept]
   class StudentCandidates
-    attr_reader :students, :concept_candidates, :domain_model
+    attr_reader :students, :concept_candidates, :domain_model, :a
 
     def initialize(params)
       # Posts ordered by number of posts
@@ -13,6 +13,8 @@ module Generators
       deserialize_students_models
       @concept_candidates = params[:concept_candidates]
       @domain_model = params[:domain_model]
+      @a = params[:alpha] || 0.5
+
     end
 
     # Ask all Student objects to deserialize its model
@@ -36,16 +38,16 @@ module Generators
 
     # Returns a pair [String, Float]
     def evaluate_candidate_concept(student, concept, roots)
-      return [concept, 0] unless student.has_knowledge_about?(concept)
-      return [concept, 0] if student.has_commented?(concept)
-      concept_knowledge_ratio = student.model.nodes[concept].weight / domain_model.nodes[concept].weight
-      comments_scores = student.posts_scores_for(roots)
-      # TODO: Fix so scores are stored as floats and map is not necessary
-      score = concept_knowledge_ratio + comments_scores.map {|x| x.to_f}.reduce(:+)
-      [concept, score]
+      return [concept, -1] if student.has_commented?(concept)
+      knowledge = student.knowledge_about(concept)
+      root_ratio = student.select_commented(roots).size / roots.size.to_f 
+      utility = a *  knowledge + ( 1 - a ) * root_ratio
+
+      [concept, utility]
     end
 
-    def choose_final_candidates(data)
+    def assign_candidates
+      data = evaluate_all_students
       candidates =  self.concept_candidates.keys
       # Counts many times a concept has been picked
       # If there are more students than concepts, it cycles around the list

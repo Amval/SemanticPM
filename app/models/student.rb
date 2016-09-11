@@ -27,6 +27,20 @@ class Student < ActiveRecord::Base
     learning_resources.slice(*self.accessed_learning_resources)
   end
 
+  def knowledge_about(concept)
+    if has_knowledge_about? concept
+      self.model.nodes[concept].weight
+    else
+      0
+    end
+  end
+
+  # identical to has_commented_set? but better naming
+  # TODO: Change
+  def select_commented(roots)
+    roots.select { |root| has_commented?(root) }
+  end
+
   # Use after deserialize model
   def has_knowledge_about?(concept)
     self.model.node_names.include?(concept)

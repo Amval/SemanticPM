@@ -6,5 +6,6 @@ module Models
     def initialize(resources)
       super(*resources.values)
     end
+
   end
 end

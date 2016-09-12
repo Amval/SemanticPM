@@ -14,11 +14,11 @@ module API
 
       # Creates new Course
       def create
-        puts "======================"
-        puts course_params
+        
         course = @user.courses.build(course_params)
         if course.save
-          render json: course, status: 204, location: course
+          messages = Message.where(course_id: course.id)
+          render json: messages, status: 200, location: course
         else
           render json: course.errors, status: 422
         end

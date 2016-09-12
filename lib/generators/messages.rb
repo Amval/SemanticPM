@@ -23,7 +23,7 @@ module Generators
 
     # Creates and insert a message into the DB.
     def create_message
-      Message.create(student_id: self.student.id, content: compose_message)
+      Message.create(student_id: self.student.id, course_id: self.course_id, content: compose_message)
     end
 
     private

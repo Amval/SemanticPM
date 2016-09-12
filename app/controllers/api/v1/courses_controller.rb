@@ -14,6 +14,8 @@ module API
 
       # Creates new Course
       def create
+        puts "======================"
+        puts course_params
         course = @user.courses.build(course_params)
         if course.save
           render json: course, status: 204, location: course
@@ -35,7 +37,7 @@ module API
 
       private
         def course_params
-          params.require(:course).permit(:id,:name, :concepts, :activity_log, :student_generated_content)
+          params.permit(:id,:name, :concepts, :activity_log, :student_generated_content)
         end
 
         # Checks headers for Auth Token or renders "unauthorized"
@@ -64,11 +66,7 @@ module API
   end
 end
 
-# curl http://api.lvh.me:3000/courses/
-# curl http://api.lvh.me:3000/courses?auth_token=5199e47d70aa4dec8fc3697427e82525
-# curl -G -d "auth_token=5199e47d70aa4dec8fc3697427e82525" "http://api.lvh.me:3000/courses"
-# curl http://api.lvh.me:3000/courses/2
-# curl -i -H "Accept: application/json" "http://api.lvh.me:3000/courses/{'auth_token':'5199e47d70aa4dec8fc3697427e82525'}"
-# curl http://api.lvh.me:3000/courses?auth_token=5199e47d70aa4dec8fc3697427e82525
 
-# curl -i -H "Accept: application/json" -X DELETE http://api.lvh.me:3000/courses/2?auth_token=199e47d70aa4dec8fc3697427e82525
+# curl -H "Authorization: Token token=cd1b1c4bc92e4634afe14df5dbc72fba" http://api.lvh.me:3000/v1/courses/
+# curl -H "Authorization: Token token=cd1b1c4bc92e4634afe14df5dbc72fba" http://api.lvh.me:3000/v1/courses/1
+

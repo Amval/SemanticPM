@@ -33,7 +33,7 @@ class Course < ActiveRecord::Base
   after_save :create_group, unless: Proc.new { |course| course.student_generated_content.url.nil? }
   after_save :update_domain, unless: Proc.new { |course| course.group.nil?}
   after_save :update_students
-
+  after_save :create_messages
   # Calls Domain Model Generator
   def create_domain
     Generators::DomainModel.new(course_id: self.id, uploader: self.concepts)
